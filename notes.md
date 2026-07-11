@@ -1,1 +1,5 @@
 rédiger la partie sur les limites du regex
+ Petite nuance à noter pour ton rapport (rigueur scientifique)
+Le total_ht calculé (69.08) est une estimation faite par le modèle (82.90 / 1.20), pas une donnée lue explicitement dans le texte — à mentionner comme limite/nuance si tu veux être rigoureuse : le LLM interprète parfois au-delà du texte brut, ce qui peut être un avantage (comble les trous) ou un risque (invente si le calcul implicite est faux) selon le contexte réel.
+📌 À noter aussi, en toute rigueur (pour ton rapport)
+Petite anomalie dans le texte OCR brut : "TVA (taux 20 pouknoo" — Tesseract a mal lu "pourcent" (à cause du chevauchement visuel qu'on avait vu sur l'image originale, souviens-toi les deux lignes qui se superposaient légèrement). Malgré ce bruit dans le texte source, Gemini a quand même correctement déduit taux_tva: 20 — ce qui montre aussi une robustesse du LLM face aux erreurs d'OCR elles-mêmes, un point intéressant à mentionner.
