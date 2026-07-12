@@ -1,0 +1,188 @@
+{
+  "exemple_facture.png": {
+    "type_document": "facture",
+    "entreprise": "VIRTUO TECH SERVICE",
+    "numero_facture": "2026-0456",
+    "date": "08/07/2026",
+    "siret": "123 456 789 00012",
+    "total_ht": 240.0,
+    "taux_tva": "20%",
+    "total_ttc": 288.0,
+    "devise": "EUR",
+    "note": "Fichier d'origine du projet (pas régénéré) — devise EUR, à ne pas confondre avec les documents marocains en MAD."
+  },
+  "ticket_caisse.png": {
+    "type_document": "ticket_de_caisse",
+    "commerce": "SUPERMARCHE EDGE",
+    "numero_facture": "004521",
+    "date": "08-07-2026",
+    "heure": "14:32",
+    "siret": null,
+    "sous_total": 82.9,
+    "taux_tva": null,
+    "tva_incluse": 13.82,
+    "total_ttc": 82.9,
+    "devise": "MAD",
+    "note": "Fichier d'origine du projet. TVA incluse dans le sous-total (pas ajoutée en plus)."
+  },
+  "facture_format2.png": {
+    "type_document": "facture",
+    "entreprise": "EDGE CONSULTING SARL",
+    "numero_facture": "FA-2026-1183",
+    "date": "05.07.2026",
+    "date_echeance": "05.08.2026",
+    "siret": "987654321 00099",
+    "total_ht": 2000.0,
+    "taux_tva": "20%",
+    "montant_tva": 400.0,
+    "total_ttc": 2400.0,
+    "devise": null,
+    "note": "Fichier d'origine du projet — devise non précisée sur le document."
+  },
+  "ticket_degrade.png": {
+    "type_document": "ticket_de_caisse",
+    "commerce": "SUPERMARCHE EDGE",
+    "numero_facture": "004521",
+    "date": "08-07-2026",
+    "heure": "14:32",
+    "siret": null,
+    "sous_total": 82.9,
+    "taux_tva": null,
+    "tva_incluse": 13.82,
+    "total_ttc": 82.9,
+    "devise": "MAD",
+    "note": "Version dégradée (inclinaison + bruit) du fichier ticket_caisse.png d'origine — même contenu, sert à évaluer l'apport du prétraitement d'image."
+  },
+  "facture_format3.png": {
+    "type_document": "facture",
+    "numero_facture": "ART-2026-0088",
+    "date": "09/07/2026",
+    "siret": null,
+    "total_ht": null,
+    "taux_tva": null,
+    "total_ttc": 3800.0
+  },
+  "ticket_caisse2.png": {
+    "type_document": "ticket_de_caisse",
+    "numero_facture": "007841",
+    "date": "10/07/2026",
+    "siret": null,
+    "total_ht": 225.5,
+    "taux_tva": null,
+    "total_ttc": 202.95,
+    "note": "Contient une remise de -10% (-22.55 MAD) appliquée au sous-total."
+  },
+  "facture_anglais.png": {
+    "type_document": "facture",
+    "numero_facture": "INV-2026-3391",
+    "date": "2026-07-11",
+    "siret": null,
+    "total_ht": null,
+    "taux_tva": null,
+    "total_ttc": 2850.0,
+    "note": "Document en anglais (devise USD) — teste la robustesse multilingue."
+  },
+  "attestation_scolarite.png": {
+    "type_document": "attestation_scolarite",
+    "numero_facture": "2026/AT/00456",
+    "date": "10/07/2026",
+    "siret": null,
+    "total_ht": null,
+    "taux_tva": null,
+    "total_ttc": null,
+    "nom_eleve": "EL AMRANI Youssef",
+    "note": "Document non-financier — aucun montant attendu ; teste la classification de type de document."
+  },
+  "ticket_flou.png": {
+    "type_document": "ticket_de_caisse",
+    "numero_facture": "003310",
+    "date": "09/07/2026",
+    "siret": null,
+    "total_ht": null,
+    "taux_tva": null,
+    "total_ttc": 43.0,
+    "note": "Dégradation par flou de bougé (motion blur) + bruit, différente de l'inclinaison de ticket_degrade.png."
+  },
+  "facture_manuscrite.png": {
+    "type_document": "facture",
+    "numero_facture": "GA-2026-114",
+    "date": "11/07/2026",
+    "siret": null,
+    "total_ht": null,
+    "taux_tva": null,
+    "total_ttc": 1070.0,
+    "nom_client": "M. Rachid Benali",
+    "note": "Champs numéro/date/client/montant écrits à la main (simulés), reste du document imprimé."
+  },
+  "ASSILAH.jpeg": {
+    "type_document": "billet_train",
+    "note": "Photo contenant 2 billets ONCF superposés : (1) Asilah -> Tanger Ville, (2) Tanger Ville -> Oujda. Cas difficile : document multi-tickets sur une seule image.",
+    "billet_1": {
+      "ville_depart": "ASILAH",
+      "ville_arrivee": "TANGER VILLE",
+      "date": "15/09/2024",
+      "heure_depart": "15:04",
+      "heure_arrivee": "15:37",
+      "voiture": "501",
+      "place": "36",
+      "classe": "2"
+    },
+    "billet_2": {
+      "ville_depart": "TANGER VILLE",
+      "ville_arrivee": "OUJDA",
+      "date": "15/03/2025",
+      "heure_depart": "11:35",
+      "heure_arrivee": "22:12",
+      "voiture": "303",
+      "place": "104",
+      "classe": "2",
+      "prix": "112 DH"
+    },
+    "a_confirmer": true
+  },
+  "BIGUP.jpeg": {
+    "type_document": "ticket_de_caisse",
+    "commerce": "BIGUP",
+    "date": "19/01/2026",
+    "heure": "21:43",
+    "article": "CHICKEN TIKKA",
+    "quantite": 1,
+    "prix_unitaire": 20.0,
+    "total_ttc": 20.0,
+    "devise": "DH",
+    "a_confirmer": false
+  },
+  "OUJDA.jpeg": {
+    "type_document": "recu_paiement_bancaire",
+    "lieu": "ONCF GARE Tanger",
+    "date": "28/04/26",
+    "montant": 218.0,
+    "devise": "MAD",
+    "moyen_paiement": "carte Mastercard (débit)",
+    "note": "Photo montrant 2 reçus superposés avec le même montant (218,00 MAD) mais des numéros de transaction différents.",
+    "a_confirmer": true
+  },
+  "poids.jpeg": {
+    "type_document": "recu_service",
+    "societe": "YOUR SPACE",
+    "service": "La direction",
+    "telephone": "0661527193",
+    "note": "Document en arabe, deux tickets superposés avec valeurs numériques difficiles à lire avec certitude : ~165.5, 66.9, 19.0-24.4, 60.2, 25.0, 52-68. Dates visibles : 01-01-2000 (probable date par défaut/erreur) et 10-10-2025.",
+    "a_confirmer": true
+  },
+  "RYANAIR.jpeg": {
+    "type_document": "carte_embarquement",
+    "compagnie": "RYANAIR",
+    "nom_passager": "ARIBI/MALAK",
+    "ville_depart": "OUJDA",
+    "ville_arrivee": "TANGIER BATOUTA",
+    "vol": "FR 6742",
+    "date": "15FEB26",
+    "siege": "16A",
+    "heure_embarquement_gate_ferme": "19:55",
+    "heure_depart": "20:25",
+    "heure_arrivee": "21:30",
+    "pnr": "A3CWVN",
+    "a_confirmer": false
+  }
+}

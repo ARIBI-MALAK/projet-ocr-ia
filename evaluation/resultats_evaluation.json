@@ -1,0 +1,1285 @@
+{
+  "compteurs": {
+    "regex": {
+      "type_document": {
+        "correct_present": 0,
+        "correct_absent": 0,
+        "faux_positif": 0,
+        "faux_negatif": 14,
+        "erreur_valeur": 0,
+        "erreur_technique": 0
+      },
+      "numero_facture": {
+        "correct_present": 1,
+        "correct_absent": 4,
+        "faux_positif": 0,
+        "faux_negatif": 9,
+        "erreur_valeur": 0,
+        "erreur_technique": 0
+      },
+      "date": {
+        "correct_present": 3,
+        "correct_absent": 1,
+        "faux_positif": 0,
+        "faux_negatif": 10,
+        "erreur_valeur": 0,
+        "erreur_technique": 0
+      },
+      "siret": {
+        "correct_present": 1,
+        "correct_absent": 12,
+        "faux_positif": 0,
+        "faux_negatif": 1,
+        "erreur_valeur": 0,
+        "erreur_technique": 0
+      },
+      "total_ht": {
+        "correct_present": 1,
+        "correct_absent": 11,
+        "faux_positif": 0,
+        "faux_negatif": 2,
+        "erreur_valeur": 0,
+        "erreur_technique": 0
+      },
+      "taux_tva": {
+        "correct_present": 0,
+        "correct_absent": 12,
+        "faux_positif": 0,
+        "faux_negatif": 1,
+        "erreur_valeur": 1,
+        "erreur_technique": 0
+      },
+      "total_ttc": {
+        "correct_present": 1,
+        "correct_absent": 4,
+        "faux_positif": 0,
+        "faux_negatif": 9,
+        "erreur_valeur": 0,
+        "erreur_technique": 0
+      }
+    },
+    "llm": {
+      "type_document": {
+        "correct_present": 9,
+        "correct_absent": 0,
+        "faux_positif": 0,
+        "faux_negatif": 5,
+        "erreur_valeur": 0,
+        "erreur_technique": 0
+      },
+      "numero_facture": {
+        "correct_present": 7,
+        "correct_absent": 4,
+        "faux_positif": 0,
+        "faux_negatif": 3,
+        "erreur_valeur": 0,
+        "erreur_technique": 0
+      },
+      "date": {
+        "correct_present": 7,
+        "correct_absent": 1,
+        "faux_positif": 0,
+        "faux_negatif": 6,
+        "erreur_valeur": 0,
+        "erreur_technique": 0
+      },
+      "siret": {
+        "correct_present": 2,
+        "correct_absent": 12,
+        "faux_positif": 0,
+        "faux_negatif": 0,
+        "erreur_valeur": 0,
+        "erreur_technique": 0
+      },
+      "total_ht": {
+        "correct_present": 2,
+        "correct_absent": 11,
+        "faux_positif": 0,
+        "faux_negatif": 1,
+        "erreur_valeur": 0,
+        "erreur_technique": 0
+      },
+      "taux_tva": {
+        "correct_present": 2,
+        "correct_absent": 12,
+        "faux_positif": 0,
+        "faux_negatif": 0,
+        "erreur_valeur": 0,
+        "erreur_technique": 0
+      },
+      "total_ttc": {
+        "correct_present": 6,
+        "correct_absent": 4,
+        "faux_positif": 0,
+        "faux_negatif": 3,
+        "erreur_valeur": 1,
+        "erreur_technique": 0
+      }
+    }
+  },
+  "matrice_confusion": {
+    "regex": {
+      "facture": {
+        "aucun": 5
+      },
+      "ticket_de_caisse": {
+        "aucun": 5
+      },
+      "attestation_scolarite": {
+        "aucun": 1
+      },
+      "recu_paiement_bancaire": {
+        "aucun": 1
+      },
+      "recu_service": {
+        "aucun": 1
+      },
+      "carte_embarquement": {
+        "aucun": 1
+      }
+    },
+    "llm": {
+      "facture": {
+        "facture": 5
+      },
+      "ticket_de_caisse": {
+        "ticket_de_caisse": 3,
+        "aucun": 2
+      },
+      "attestation_scolarite": {
+        "attestation_scolarite": 1
+      },
+      "recu_paiement_bancaire": {
+        "aucun": 1
+      },
+      "recu_service": {
+        "aucun": 1
+      },
+      "carte_embarquement": {
+        "aucun": 1
+      }
+    }
+  },
+  "details": [
+    {
+      "document": "exemple_facture.png",
+      "methode": "regex",
+      "erreur": null,
+      "type_document": {
+        "attendu": "facture",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": "2026-0456",
+        "obtenu": "2026-0456",
+        "categorie": "correct_present"
+      },
+      "date": {
+        "attendu": "08/07/2026",
+        "obtenu": "08/07/2026",
+        "categorie": "correct_present"
+      },
+      "siret": {
+        "attendu": "123 456 789 00012",
+        "obtenu": "123 456 789 00012",
+        "categorie": "correct_present"
+      },
+      "total_ht": {
+        "attendu": 240.0,
+        "obtenu": 240.0,
+        "categorie": "correct_present"
+      },
+      "taux_tva": {
+        "attendu": "20%",
+        "obtenu": 20,
+        "categorie": "erreur_valeur"
+      },
+      "total_ttc": {
+        "attendu": 288.0,
+        "obtenu": 288.0,
+        "categorie": "correct_present"
+      }
+    },
+    {
+      "document": "exemple_facture.png",
+      "methode": "llm",
+      "erreur": null,
+      "type_document": {
+        "attendu": "facture",
+        "obtenu": "facture",
+        "categorie": "correct_present"
+      },
+      "numero_facture": {
+        "attendu": "2026-0456",
+        "obtenu": "2026-0456",
+        "categorie": "correct_present"
+      },
+      "date": {
+        "attendu": "08/07/2026",
+        "obtenu": "08/07/2026",
+        "categorie": "correct_present"
+      },
+      "siret": {
+        "attendu": "123 456 789 00012",
+        "obtenu": "123 456 789 00012",
+        "categorie": "correct_present"
+      },
+      "total_ht": {
+        "attendu": 240.0,
+        "obtenu": 240.0,
+        "categorie": "correct_present"
+      },
+      "taux_tva": {
+        "attendu": "20%",
+        "obtenu": "20%",
+        "categorie": "correct_present"
+      },
+      "total_ttc": {
+        "attendu": 288.0,
+        "obtenu": 288.0,
+        "categorie": "correct_present"
+      }
+    },
+    {
+      "document": "ticket_caisse.png",
+      "methode": "regex",
+      "erreur": null,
+      "type_document": {
+        "attendu": "ticket_de_caisse",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": "004521",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "date": {
+        "attendu": "08-07-2026",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": 82.9,
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      }
+    },
+    {
+      "document": "ticket_caisse.png",
+      "methode": "llm",
+      "erreur": null,
+      "type_document": {
+        "attendu": "ticket_de_caisse",
+        "obtenu": "ticket_de_caisse",
+        "categorie": "correct_present"
+      },
+      "numero_facture": {
+        "attendu": "004521",
+        "obtenu": "004521",
+        "categorie": "correct_present"
+      },
+      "date": {
+        "attendu": "08-07-2026",
+        "obtenu": "08-07-2026",
+        "categorie": "correct_present"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": 82.9,
+        "obtenu": 82.9,
+        "categorie": "correct_present"
+      }
+    },
+    {
+      "document": "facture_format2.png",
+      "methode": "regex",
+      "erreur": null,
+      "type_document": {
+        "attendu": "facture",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": "FA-2026-1183",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "date": {
+        "attendu": "05.07.2026",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "siret": {
+        "attendu": "987654321 00099",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "total_ht": {
+        "attendu": 2000.0,
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "taux_tva": {
+        "attendu": "20%",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "total_ttc": {
+        "attendu": 2400.0,
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      }
+    },
+    {
+      "document": "facture_format2.png",
+      "methode": "llm",
+      "erreur": null,
+      "type_document": {
+        "attendu": "facture",
+        "obtenu": "facture",
+        "categorie": "correct_present"
+      },
+      "numero_facture": {
+        "attendu": "FA-2026-1183",
+        "obtenu": "FA-2026-1183",
+        "categorie": "correct_present"
+      },
+      "date": {
+        "attendu": "05.07.2026",
+        "obtenu": "05.07.2026",
+        "categorie": "correct_present"
+      },
+      "siret": {
+        "attendu": "987654321 00099",
+        "obtenu": "987654321 00099",
+        "categorie": "correct_present"
+      },
+      "total_ht": {
+        "attendu": 2000.0,
+        "obtenu": 2000.0,
+        "categorie": "correct_present"
+      },
+      "taux_tva": {
+        "attendu": "20%",
+        "obtenu": "20%",
+        "categorie": "correct_present"
+      },
+      "total_ttc": {
+        "attendu": 2400.0,
+        "obtenu": 2400.0,
+        "categorie": "correct_present"
+      }
+    },
+    {
+      "document": "ticket_degrade.png",
+      "methode": "regex",
+      "erreur": null,
+      "type_document": {
+        "attendu": "ticket_de_caisse",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": "004521",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "date": {
+        "attendu": "08-07-2026",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": 82.9,
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      }
+    },
+    {
+      "document": "ticket_degrade.png",
+      "methode": "llm",
+      "erreur": null,
+      "type_document": {
+        "attendu": "ticket_de_caisse",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": "004521",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "date": {
+        "attendu": "08-07-2026",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": 82.9,
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      }
+    },
+    {
+      "document": "facture_format3.png",
+      "methode": "regex",
+      "erreur": null,
+      "type_document": {
+        "attendu": "facture",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": "ART-2026-0088",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "date": {
+        "attendu": "09/07/2026",
+        "obtenu": "09/07/2026",
+        "categorie": "correct_present"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": 3800.0,
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      }
+    },
+    {
+      "document": "facture_format3.png",
+      "methode": "llm",
+      "erreur": null,
+      "type_document": {
+        "attendu": "facture",
+        "obtenu": "facture",
+        "categorie": "correct_present"
+      },
+      "numero_facture": {
+        "attendu": "ART-2026-0088",
+        "obtenu": "ART-2026-0088",
+        "categorie": "correct_present"
+      },
+      "date": {
+        "attendu": "09/07/2026",
+        "obtenu": "09/07/2026",
+        "categorie": "correct_present"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": 3800.0,
+        "obtenu": 3800.0,
+        "categorie": "correct_present"
+      }
+    },
+    {
+      "document": "ticket_caisse2.png",
+      "methode": "regex",
+      "erreur": null,
+      "type_document": {
+        "attendu": "ticket_de_caisse",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": "007841",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "date": {
+        "attendu": "10/07/2026",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": 225.5,
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": 202.95,
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      }
+    },
+    {
+      "document": "ticket_caisse2.png",
+      "methode": "llm",
+      "erreur": null,
+      "type_document": {
+        "attendu": "ticket_de_caisse",
+        "obtenu": "ticket_de_caisse",
+        "categorie": "correct_present"
+      },
+      "numero_facture": {
+        "attendu": "007841",
+        "obtenu": "007841",
+        "categorie": "correct_present"
+      },
+      "date": {
+        "attendu": "10/07/2026",
+        "obtenu": "10/07/2026",
+        "categorie": "correct_present"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": 225.5,
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": 202.95,
+        "obtenu": 202.95,
+        "categorie": "correct_present"
+      }
+    },
+    {
+      "document": "facture_anglais.png",
+      "methode": "regex",
+      "erreur": null,
+      "type_document": {
+        "attendu": "facture",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": "INV-2026-3391",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "date": {
+        "attendu": "2026-07-11",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": 2850.0,
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      }
+    },
+    {
+      "document": "facture_anglais.png",
+      "methode": "llm",
+      "erreur": null,
+      "type_document": {
+        "attendu": "facture",
+        "obtenu": "facture",
+        "categorie": "correct_present"
+      },
+      "numero_facture": {
+        "attendu": "INV-2026-3391",
+        "obtenu": "INV-2026-3391",
+        "categorie": "correct_present"
+      },
+      "date": {
+        "attendu": "2026-07-11",
+        "obtenu": "2026-07-11",
+        "categorie": "correct_present"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": 2850.0,
+        "obtenu": 2850.0,
+        "categorie": "correct_present"
+      }
+    },
+    {
+      "document": "attestation_scolarite.png",
+      "methode": "regex",
+      "erreur": null,
+      "type_document": {
+        "attendu": "attestation_scolarite",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": "2026/AT/00456",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "date": {
+        "attendu": "10/07/2026",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      }
+    },
+    {
+      "document": "attestation_scolarite.png",
+      "methode": "llm",
+      "erreur": null,
+      "type_document": {
+        "attendu": "attestation_scolarite",
+        "obtenu": "attestation_scolarite",
+        "categorie": "correct_present"
+      },
+      "numero_facture": {
+        "attendu": "2026/AT/00456",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "date": {
+        "attendu": "10/07/2026",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      }
+    },
+    {
+      "document": "ticket_flou.png",
+      "methode": "regex",
+      "erreur": null,
+      "type_document": {
+        "attendu": "ticket_de_caisse",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": "003310",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "date": {
+        "attendu": "09/07/2026",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": 43.0,
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      }
+    },
+    {
+      "document": "ticket_flou.png",
+      "methode": "llm",
+      "erreur": null,
+      "type_document": {
+        "attendu": "ticket_de_caisse",
+        "obtenu": "ticket_de_caisse",
+        "categorie": "correct_present"
+      },
+      "numero_facture": {
+        "attendu": "003310",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "date": {
+        "attendu": "09/07/2026",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": 43.0,
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      }
+    },
+    {
+      "document": "facture_manuscrite.png",
+      "methode": "regex",
+      "erreur": null,
+      "type_document": {
+        "attendu": "facture",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": "GA-2026-114",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "date": {
+        "attendu": "11/07/2026",
+        "obtenu": "11/07/2026",
+        "categorie": "correct_present"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": 1070.0,
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      }
+    },
+    {
+      "document": "facture_manuscrite.png",
+      "methode": "llm",
+      "erreur": null,
+      "type_document": {
+        "attendu": "facture",
+        "obtenu": "facture",
+        "categorie": "correct_present"
+      },
+      "numero_facture": {
+        "attendu": "GA-2026-114",
+        "obtenu": "GA-2026-114",
+        "categorie": "correct_present"
+      },
+      "date": {
+        "attendu": "11/07/2026",
+        "obtenu": "11/07/2026",
+        "categorie": "correct_present"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": 1070.0,
+        "obtenu": "1070.00",
+        "categorie": "erreur_valeur"
+      }
+    },
+    {
+      "document": "BIGUP.jpeg",
+      "methode": "regex",
+      "erreur": null,
+      "type_document": {
+        "attendu": "ticket_de_caisse",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "date": {
+        "attendu": "19/01/2026",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": 20.0,
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      }
+    },
+    {
+      "document": "BIGUP.jpeg",
+      "methode": "llm",
+      "erreur": null,
+      "type_document": {
+        "attendu": "ticket_de_caisse",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "date": {
+        "attendu": "19/01/2026",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": 20.0,
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      }
+    },
+    {
+      "document": "OUJDA.jpeg",
+      "methode": "regex",
+      "erreur": null,
+      "type_document": {
+        "attendu": "recu_paiement_bancaire",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "date": {
+        "attendu": "28/04/26",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      }
+    },
+    {
+      "document": "OUJDA.jpeg",
+      "methode": "llm",
+      "erreur": null,
+      "type_document": {
+        "attendu": "recu_paiement_bancaire",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "date": {
+        "attendu": "28/04/26",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      }
+    },
+    {
+      "document": "poids.jpeg",
+      "methode": "regex",
+      "erreur": null,
+      "type_document": {
+        "attendu": "recu_service",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "date": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      }
+    },
+    {
+      "document": "poids.jpeg",
+      "methode": "llm",
+      "erreur": null,
+      "type_document": {
+        "attendu": "recu_service",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "date": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      }
+    },
+    {
+      "document": "RYANAIR.jpeg",
+      "methode": "regex",
+      "erreur": null,
+      "type_document": {
+        "attendu": "carte_embarquement",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "date": {
+        "attendu": "15FEB26",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      }
+    },
+    {
+      "document": "RYANAIR.jpeg",
+      "methode": "llm",
+      "erreur": null,
+      "type_document": {
+        "attendu": "carte_embarquement",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "numero_facture": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "date": {
+        "attendu": "15FEB26",
+        "obtenu": null,
+        "categorie": "faux_negatif"
+      },
+      "siret": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ht": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "taux_tva": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      },
+      "total_ttc": {
+        "attendu": null,
+        "obtenu": null,
+        "categorie": "correct_absent"
+      }
+    }
+  ]
+}
