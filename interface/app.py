@@ -135,6 +135,13 @@ div[data-testid="stMetric"] {
     transform: translateY(-1px);
     box-shadow: 0 4px 18px rgba(59,130,246,0.4);
 }
+
+.stTextArea textarea {
+    background-color: #151519 !important;
+    color: #F5F5F7 !important;
+    border: 1px solid rgba(96,165,250,0.15) !important;
+    border-radius: 10px !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -243,7 +250,7 @@ with onglet_pretraitement:
         with col_avant:
             st.markdown('<div class="carte">', unsafe_allow_html=True)
             st.markdown("**📷 Image originale**")
-            st.image(chemin_original, use_container_width=True)
+            st.image(chemin_original, width=320)
             st.markdown(f"**Texte OCR obtenu** ({len(texte_avant.strip())} caractères) :")
             st.text_area("avant", texte_avant, height=180, label_visibility="collapsed", key="ta_avant")
             st.markdown('</div>', unsafe_allow_html=True)
@@ -251,7 +258,7 @@ with onglet_pretraitement:
         with col_apres:
             st.markdown('<div class="carte">', unsafe_allow_html=True)
             st.markdown("**✨ Image après prétraitement**")
-            st.image(chemin_ameliore, use_container_width=True)
+            st.image(chemin_ameliore, width=320)
             st.markdown(f"**Texte OCR obtenu** ({len(texte_apres.strip())} caractères) :")
             st.text_area("apres", texte_apres, height=180, label_visibility="collapsed", key="ta_apres")
             st.markdown('</div>', unsafe_allow_html=True)
