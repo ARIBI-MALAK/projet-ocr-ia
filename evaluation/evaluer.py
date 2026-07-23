@@ -1,6 +1,6 @@
 import json
 import os
-from pipeline import traiter_document
+import time
 
 # Champs que le pipeline (regex et LLM) tente d'extraire actuellement
 CHAMPS_A_COMPARER = ["type_document", "numero_facture", "date", "siret",
@@ -67,6 +67,26 @@ def extraire_champs_predits(resultat):
     return fusion
 
 
+from ocr.test_ocr import extraire_texte_robuste
+from extraction.extraire_donnees import extraire_donnees
+from extraction.extraire_donnees_llm import extraire_donnees_llm
+from anonymisation.anonymiser import anonymiser_donnees
+
+
+def extraire_avec_retry_llm(texte, tentatives=2):
+    """Appelle l'extraction LLM avec une nouvelle tentative en cas d'erreur reseau/API."""
+    derniere_erreur = None
+    for essai in range(tentatives):
+        try:
+            resultat = extraire_donnees_llm(texte)
+            return extraire_champs_predits(resultat), None
+        except Exception as e:
+            derniere_erreur = str(e)
+            if essai < tentatives - 1:
+                time.sleep(2)
+    return {}, derniere_erreur
+
+
 def evaluer():
     with open("verite_terrain.json", "r", encoding="utf-8") as f:
         verite_terrain = json.load(f)
@@ -102,14 +122,22 @@ def evaluer():
 
         print(f"Évaluation de {nom_fichier} ...")
 
+        try:
+            texte_brut, infos_ocr = extraire_texte_robuste(chemin)
+        except Exception as e:
+            texte_brut, infos_ocr = "", {"erreur_ocr": str(e)}
+
         for methode in ["regex", "llm"]:
-            try:
-                resultat, _ = traiter_document(chemin, methode=methode)
-                predits = extraire_champs_predits(resultat)
-                erreur = None
-            except Exception as e:
-                predits = {}
-                erreur = str(e)
+            if methode == "regex":
+                try:
+                    resultat = extraire_donnees(texte_brut)
+                    predits = extraire_champs_predits(resultat)
+                    erreur = None
+                except Exception as e:
+                    predits = {}
+                    erreur = str(e)
+            else:
+                predits, erreur = extraire_avec_retry_llm(texte_brut, tentatives=2)
 
             ligne = {"document": nom_fichier, "methode": methode, "erreur": erreur}
 

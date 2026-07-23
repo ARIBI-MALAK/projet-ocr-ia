@@ -3,6 +3,9 @@ import sys
 import os
 import tempfile
 import json
+import time
+import hashlib
+import io
 import pandas as pd
 import altair as alt
 
@@ -14,7 +17,91 @@ from extraction.extraire_donnees_llm import extraire_donnees_llm
 from anonymisation.anonymiser import anonymiser_donnees
 from preprocessing.ameliorer_image import ameliorer_image
 
+TAILLE_MAX_MO = 15
+
 st.set_page_config(page_title="Extraction OCR + IA", page_icon="⚡", layout="wide")
+
+# ---------------------------------------------------------------
+# FONCTIONS ROBUSTES (cache + retry + gestion d'erreurs)
+# ---------------------------------------------------------------
+
+@st.cache_data(show_spinner=False)
+def _ocr_avec_cache(contenu_bytes: bytes, suffixe: str) -> str:
+    """Extrait le texte OCR, mis en cache par empreinte du contenu du fichier."""
+    with tempfile.NamedTemporaryFile(delete=False, suffix=suffixe) as tmp:
+        tmp.write(contenu_bytes)
+        chemin = tmp.name
+    try:
+        texte = extraire_texte(chemin)
+    finally:
+        if os.path.exists(chemin):
+            os.remove(chemin)
+    return texte
+
+
+@st.cache_data(show_spinner=False)
+def _pretraitement_avec_cache(contenu_bytes: bytes, suffixe: str) -> bytes:
+    """Applique le prétraitement d'image, mis en cache par empreinte du contenu."""
+    with tempfile.NamedTemporaryFile(delete=False, suffix=suffixe) as tmp:
+        tmp.write(contenu_bytes)
+        chemin_original = tmp.name
+    chemin_sortie = chemin_original.replace(suffixe, f"_pretraite{suffixe}")
+    try:
+        ameliorer_image(chemin_original, chemin_sortie)
+        with open(chemin_sortie, "rb") as f:
+            resultat = f.read()
+    finally:
+        for c in (chemin_original, chemin_sortie):
+            if os.path.exists(c):
+                os.remove(c)
+    return resultat
+
+
+def extraction_llm_avec_retry(texte, tentatives=2):
+    """Appelle l'extraction LLM avec une nouvelle tentative en cas d'erreur réseau/API."""
+    derniere_erreur = None
+    for essai in range(tentatives):
+        try:
+            return extraire_donnees_llm(texte), None
+        except Exception as e:
+            derniere_erreur = str(e)
+            if essai < tentatives - 1:
+                time.sleep(1.5)
+    return None, derniere_erreur
+
+
+def extraction_regex_securisee(texte):
+    """Appelle l'extraction regex en capturant toute exception inattendue."""
+    try:
+        return extraire_donnees(texte), None
+    except Exception as e:
+        return None, str(e)
+
+
+def fichier_valide(fichier_uploade) -> tuple[bool, str]:
+    """Vérifie la taille et l'ouverture correcte du fichier avant traitement."""
+    taille_mo = len(fichier_uploade.getvalue()) / (1024 * 1024)
+    if taille_mo > TAILLE_MAX_MO:
+        return False, f"Fichier trop volumineux ({taille_mo:.1f} Mo). Limite : {TAILLE_MAX_MO} Mo."
+    try:
+        from PIL import Image
+        Image.open(io.BytesIO(fichier_uploade.getvalue())).verify()
+    except Exception:
+        return False, "Le fichier ne semble pas être une image valide ou est corrompu."
+    return True, ""
+
+
+def ajouter_a_historique(nom_fichier, methode, succes):
+    """Enregistre un document traité dans l'historique de session."""
+    if "historique" not in st.session_state:
+        st.session_state.historique = []
+    st.session_state.historique.insert(0, {
+        "fichier": nom_fichier,
+        "methode": methode,
+        "heure": time.strftime("%H:%M:%S"),
+        "succes": succes,
+    })
+    st.session_state.historique = st.session_state.historique[:8]
 
 # ---------------------------------------------------------------
 # STYLE — Palette Noir + Bleu électrique
@@ -152,6 +239,22 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+with st.sidebar:
+    st.markdown("### ⚡ OCR + IA")
+    st.caption("Projet de fin d'année — VIRTUO")
+    st.divider()
+    st.markdown("**🧩 Modules actifs**")
+    st.markdown("- OCR (Tesseract)\n- Extraction Regex\n- Extraction IA (Gemini)\n- Prétraitement image\n- Anonymisation")
+    st.divider()
+    st.markdown("**🕘 Historique de session**")
+    historique = st.session_state.get("historique", [])
+    if historique:
+        for entree in historique:
+            icone = "✅" if entree["succes"] else "⚠️"
+            st.markdown(f"{icone} `{entree['heure']}` — {entree['fichier']} ({entree['methode']})")
+    else:
+        st.caption("Aucun document traité pour l'instant.")
+
 onglet_extraction, onglet_pretraitement, onglet_evaluation = st.tabs(
     ["🔍  Extraction", "🖼️  Prétraitement d'image", "📊  Évaluation"]
 )
@@ -172,25 +275,37 @@ with onglet_extraction:
         appliquer_anonymisation = st.checkbox("Anonymiser les champs sensibles", value=False)
 
     if fichier is not None:
-        st.image(fichier, caption="Document déposé", width=280)
+        valide, message_erreur = fichier_valide(fichier)
 
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp:
-            tmp.write(fichier.getvalue())
-            chemin_temp = tmp.name
+        if not valide:
+            st.error(f"❌ {message_erreur}")
+            ajouter_a_historique(fichier.name, "validation", False)
+        else:
+            st.image(fichier, caption="Document déposé", width=280)
 
-        chemin_a_traiter = chemin_temp
-        chemin_pretraite = None
+            contenu_bytes = fichier.getvalue()
+            suffixe = os.path.splitext(fichier.name)[1] or ".png"
 
-        if appliquer_pretraitement:
-            chemin_pretraite = chemin_temp.replace(".png", "_pretraite.png")
-            with st.spinner("Prétraitement de l'image en cours..."):
-                ameliorer_image(chemin_temp, chemin_pretraite)
-            chemin_a_traiter = chemin_pretraite
+            chemin_a_traiter_bytes = contenu_bytes
 
-        with st.spinner("Extraction OCR + IA en cours..."):
-            texte_brut = extraire_texte(chemin_a_traiter)
-            donnees_regex = extraire_donnees(texte_brut)
-            donnees_llm = extraire_donnees_llm(texte_brut)
+            if appliquer_pretraitement:
+                with st.spinner("Prétraitement de l'image en cours..."):
+                    try:
+                        chemin_a_traiter_bytes = _pretraitement_avec_cache(contenu_bytes, suffixe)
+                    except Exception as e:
+                        st.warning(f"⚠️ Le prétraitement a échoué ({e}). Poursuite avec l'image originale.")
+
+            with st.spinner("Extraction OCR en cours..."):
+                try:
+                    texte_brut = _ocr_avec_cache(chemin_a_traiter_bytes, suffixe)
+                except Exception as e:
+                    texte_brut = ""
+                    st.error(f"❌ Échec de l'OCR : {e}")
+
+            donnees_regex, erreur_regex = extraction_regex_securisee(texte_brut) if texte_brut else ({}, "Texte OCR vide")
+
+            with st.spinner("Extraction IA (Gemini) en cours..."):
+                donnees_llm, erreur_llm = extraction_llm_avec_retry(texte_brut) if texte_brut else ({}, "Texte OCR vide")
 
             if appliquer_anonymisation:
                 if isinstance(donnees_regex, dict):
@@ -198,29 +313,65 @@ with onglet_extraction:
                 if isinstance(donnees_llm, dict):
                     donnees_llm = anonymiser_donnees(donnees_llm)
 
-        os.remove(chemin_temp)
-        if chemin_pretraite and os.path.exists(chemin_pretraite):
-            os.remove(chemin_pretraite)
+            succes_global = not erreur_regex and not erreur_llm and texte_brut
+            ajouter_a_historique(fichier.name, "regex+llm", bool(succes_global))
 
-        st.markdown('<div class="titre-section">2. Texte brut extrait (OCR)</div>', unsafe_allow_html=True)
-        with st.expander("Voir le texte OCR", expanded=False):
-            st.text_area("Texte", texte_brut, height=150, label_visibility="collapsed")
+            st.markdown('<div class="titre-section">2. Texte brut extrait (OCR)</div>', unsafe_allow_html=True)
+            if not texte_brut.strip():
+                st.warning("⚠️ Aucun texte n'a pu être extrait de cette image (photo trop dégradée, angle de perspective, résolution). Essaie d'activer le prétraitement, ou vérifie la netteté du document.")
+            with st.expander("Voir le texte OCR", expanded=False):
+                st.text_area("Texte", texte_brut, height=150, label_visibility="collapsed")
 
-        st.markdown('<div class="titre-section">3. Comparaison des méthodes d\'extraction</div>', unsafe_allow_html=True)
+            st.markdown('<div class="titre-section">3. Comparaison des méthodes d\'extraction</div>', unsafe_allow_html=True)
 
-        col_regex, col_llm = st.columns(2)
+            col_regex, col_llm = st.columns(2)
 
-        with col_regex:
-            st.markdown('<div class="carte">', unsafe_allow_html=True)
-            st.markdown("**⚙️ Méthode : Regex (règles simples)**")
-            st.json(donnees_regex)
-            st.markdown('</div>', unsafe_allow_html=True)
+            with col_regex:
+                st.markdown('<div class="carte">', unsafe_allow_html=True)
+                st.markdown("**⚙️ Méthode : Regex (règles simples)**")
+                if erreur_regex:
+                    st.error(f"Erreur : {erreur_regex}")
+                else:
+                    st.json(donnees_regex)
+                    st.download_button("⬇️ Télécharger JSON (Regex)",
+                                        data=json.dumps(donnees_regex, indent=2, ensure_ascii=False),
+                                        file_name=f"regex_{fichier.name}.json", mime="application/json",
+                                        key="dl_regex")
+                st.markdown('</div>', unsafe_allow_html=True)
 
-        with col_llm:
-            st.markdown('<div class="carte">', unsafe_allow_html=True)
-            st.markdown("**🤖 Méthode : IA (Gemini)**")
-            st.json(donnees_llm)
-            st.markdown('</div>', unsafe_allow_html=True)
+            with col_llm:
+                st.markdown('<div class="carte">', unsafe_allow_html=True)
+                st.markdown("**🤖 Méthode : IA (Gemini)**")
+                if erreur_llm:
+                    st.error(f"Erreur après plusieurs tentatives : {erreur_llm}")
+                else:
+                    st.json(donnees_llm)
+                    st.download_button("⬇️ Télécharger JSON (IA)",
+                                        data=json.dumps(donnees_llm, indent=2, ensure_ascii=False),
+                                        file_name=f"llm_{fichier.name}.json", mime="application/json",
+                                        key="dl_llm")
+                st.markdown('</div>', unsafe_allow_html=True)
+
+            if not erreur_regex and not erreur_llm:
+                def _aplatir(d):
+                    if not isinstance(d, dict):
+                        return {}
+                    base = {"type_document": d.get("type_document")}
+                    base.update(d.get("champs", {}) if isinstance(d.get("champs"), dict) else d)
+                    return base
+
+                df_export = pd.DataFrame([
+                    {"méthode": "regex", **_aplatir(donnees_regex)},
+                    {"méthode": "llm", **_aplatir(donnees_llm)},
+                ])
+                buffer_excel = io.BytesIO()
+                with pd.ExcelWriter(buffer_excel, engine="openpyxl") as writer:
+                    df_export.to_excel(writer, index=False, sheet_name="Extraction")
+                st.download_button("📊 Télécharger comparaison (Excel)",
+                                    data=buffer_excel.getvalue(),
+                                    file_name=f"comparaison_{fichier.name}.xlsx",
+                                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                    key="dl_excel")
     else:
         st.info("Dépose une facture ou un ticket de caisse pour lancer l'extraction.")
 
@@ -234,16 +385,27 @@ with onglet_pretraitement:
     fichier_pretrait = st.file_uploader("Choisis une image dégradée", type=["png", "jpg", "jpeg"], key="upload_pretraitement")
 
     if fichier_pretrait is not None:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp:
-            tmp.write(fichier_pretrait.getvalue())
-            chemin_original = tmp.name
+        valide, message_erreur = fichier_valide(fichier_pretrait)
+        if not valide:
+            st.error(f"❌ {message_erreur}")
+        else:
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp:
+                tmp.write(fichier_pretrait.getvalue())
+                chemin_original = tmp.name
 
-        chemin_ameliore = chemin_original.replace(".png", "_ameliore.png")
+            chemin_ameliore = chemin_original.replace(".png", "_ameliore.png")
 
-        with st.spinner("Application du prétraitement..."):
-            ameliorer_image(chemin_original, chemin_ameliore)
-            texte_avant = extraire_texte(chemin_original)
-            texte_apres = extraire_texte(chemin_ameliore)
+            try:
+                with st.spinner("Application du prétraitement..."):
+                    ameliorer_image(chemin_original, chemin_ameliore)
+                    texte_avant = extraire_texte(chemin_original)
+                    texte_apres = extraire_texte(chemin_ameliore)
+            except Exception as e:
+                st.error(f"❌ Erreur pendant le prétraitement ou l'OCR : {e}")
+                for c in (chemin_original, chemin_ameliore):
+                    if os.path.exists(c):
+                        os.remove(c)
+                st.stop()
 
         col_avant, col_apres = st.columns(2)
 

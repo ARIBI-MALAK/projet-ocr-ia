@@ -1,5 +1,5 @@
 from anonymisation.anonymiser import anonymiser_donnees
-from ocr.test_ocr import extraire_texte
+from ocr.test_ocr import extraire_texte_robuste
 from extraction.extraire_donnees import extraire_donnees
 from extraction.extraire_donnees_llm import extraire_donnees_llm
 import json
@@ -10,7 +10,7 @@ def traiter_document(chemin_image, methode="llm", anonymiser=False):
     methode : "regex" ou "llm"
     """
 
-    texte_brut = extraire_texte(chemin_image)
+    texte_brut, infos_ocr = extraire_texte_robuste(chemin_image)
 
     if methode == "llm":
         donnees = extraire_donnees_llm(texte_brut)

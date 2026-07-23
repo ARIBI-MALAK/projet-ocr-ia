@@ -138,9 +138,9 @@
       "classe": "2",
       "prix": "112 DH"
     },
-    "a_confirmer": true
+    "a_confirmer": false
   },
-  "BIGUP.jpeg": {
+  "BIGUP_recadre.jpeg": {
     "type_document": "ticket_de_caisse",
     "commerce": "BIGUP",
     "date": "19/01/2026",
@@ -152,7 +152,7 @@
     "devise": "DH",
     "a_confirmer": false
   },
-  "OUJDA.jpeg": {
+  "OUJDA_recadre.jpeg": {
     "type_document": "recu_paiement_bancaire",
     "lieu": "ONCF GARE Tanger",
     "date": "28/04/26",
@@ -160,17 +160,26 @@
     "devise": "MAD",
     "moyen_paiement": "carte Mastercard (débit)",
     "note": "Photo montrant 2 reçus superposés avec le même montant (218,00 MAD) mais des numéros de transaction différents.",
-    "a_confirmer": true
+    "a_confirmer": false
   },
   "poids.jpeg": {
-    "type_document": "recu_service",
+    "type_document": "fiche_mesure_corporelle",
     "societe": "YOUR SPACE",
     "service": "La direction",
     "telephone": "0661527193",
-    "note": "Document en arabe, deux tickets superposés avec valeurs numériques difficiles à lire avec certitude : ~165.5, 66.9, 19.0-24.4, 60.2, 25.0, 52-68. Dates visibles : 01-01-2000 (probable date par défaut/erreur) et 10-10-2025.",
+    "note": "Fiche de suivi poids/taille d'une personne (salle de sport ou centre bien-être), deux sessions de mesure superposées sur la photo.",
+    "session_1": {
+      "date": "01-01-2000",
+      "note": "Date suspecte (probable valeur par défaut du terminal, pas une vraie date de mesure)",
+      "valeurs_visibles": "~165.5 / 66.9 / 19.0-24.4 / 6.7-52 (poids en kg, taille en cm, IMC ? - à confirmer)"
+    },
+    "session_2": {
+      "date": "10-10-2025",
+      "valeurs_visibles": "~165.5 / 66.9 / 19.0-25.0 / 60.2-68 (poids en kg, taille en cm, IMC ? - à confirmer)"
+    },
     "a_confirmer": true
   },
-  "RYANAIR.jpeg": {
+  "RYANAIR_recadre.jpeg": {
     "type_document": "carte_embarquement",
     "compagnie": "RYANAIR",
     "nom_passager": "ARIBI/MALAK",

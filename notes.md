@@ -144,3 +144,27 @@ Le regex reste rigide face à tout changement de format. La performance du
 LLM dépend cependant fortement de la qualité du texte OCR en amont : sur 
 des photos réelles avec déformation de perspective, l'échec de l'OCR rend 
 toute extraction impossible, quelle que soit la méthode utilisée en aval.
+
+
+### Limite de robustesse OCR sur photos réelles dégradées
+
+Sur le document réel OUJDA.jpeg (reçu de paiement photographié à la main), 
+plusieurs stratégies de correction ont été testées méthodiquement :
+1. Rotation seule (0°/90°/180°/270°) → échec (texte vide)
+2. Modes de segmentation PSM 6 et PSM 11 → échec (texte incohérent)
+3. Combinaison rotation × PSM 6 sur les 4 angles → échec systématique
+4. Stratégie cascade (prétraitement × orientation × score de confiance) → 
+   score de confiance nul sur toutes les combinaisons testées
+
+Conclusion : l'échec n'est pas dû à l'orientation ni au mode de segmentation, 
+mais à un cumul de facteurs de dégradation réels (texte de petite taille 
+relativement à la résolution de la photo, reflets lumineux sur le carrelage 
+en arrière-plan, légère courbure du papier). Une solution robuste nécessiterait 
+une détection et un recadrage automatique du document dans la scène (technique 
+de type "scanner mobile"), hors du périmètre raisonnable de ce projet dans le 
+temps imparti. Ce cas illustre une limite réelle et documentée des moteurs 
+OCR classiques (Tesseract) sur des photos non contrôlées.
+
+Point à noter : erreur_technique=1 sur tous les champs LLM
+
+Un document a provoqué une vraie erreur technique (pas juste un champ manqué) pendant le traitement LLM — visible sur chaque ligne du résumé. C'est probablement un souci ponctuel (quota API, ou une exception dans le pipeline sur un des 3 documents recadrés qu'on vient d'ajouter). Ce n'est pas grave en soi, mais si tu veux qu'on l'identifie précisément avant de continuer, je peux regarder le détail
