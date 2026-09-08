@@ -90,6 +90,23 @@ def fichier_valide(fichier_uploade) -> tuple[bool, str]:
         return False, "Le fichier ne semble pas être une image valide ou est corrompu."
     return True, ""
 
+def _aplatir(d):
+    """Aplati un dict {type_document, champs: {...}} en un seul niveau pour l'export tabulaire."""
+    if not isinstance(d, dict):
+        return {}
+    base = {"type_document": d.get("type_document")}
+    base.update(d.get("champs", {}) if isinstance(d.get("champs"), dict) else d)
+    return base
+
+
+def _aplatir(d):
+    """Aplati un dict pour l export tabulaire."""
+    if not isinstance(d, dict):
+        return {}
+    base = {"type_document": d.get("type_document")}
+    base.update(d.get("champs", {}) if isinstance(d.get("champs"), dict) else d)
+    return base
+
 
 def ajouter_a_historique(nom_fichier, methode, succes):
     """Enregistre un document traité dans l'historique de session."""
@@ -351,27 +368,19 @@ with onglet_extraction:
                                         file_name=f"llm_{fichier.name}.json", mime="application/json",
                                         key="dl_llm")
                 st.markdown('</div>', unsafe_allow_html=True)
-
-            if not erreur_regex and not erreur_llm:
-                def _aplatir(d):
-                    if not isinstance(d, dict):
-                        return {}
-                    base = {"type_document": d.get("type_document")}
-                    base.update(d.get("champs", {}) if isinstance(d.get("champs"), dict) else d)
-                    return base
-
-                df_export = pd.DataFrame([
-                    {"méthode": "regex", **_aplatir(donnees_regex)},
-                    {"méthode": "llm", **_aplatir(donnees_llm)},
-                ])
-                buffer_excel = io.BytesIO()
-                with pd.ExcelWriter(buffer_excel, engine="openpyxl") as writer:
-                    df_export.to_excel(writer, index=False, sheet_name="Extraction")
-                st.download_button("📊 Télécharger comparaison (Excel)",
-                                    data=buffer_excel.getvalue(),
-                                    file_name=f"comparaison_{fichier.name}.xlsx",
-                                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                                    key="dl_excel")
+        if not erreur_regex and not erreur_llm:
+            df_export = pd.DataFrame([
+                {"méthode": "regex", **_aplatir(donnees_regex)},
+                {"méthode": "llm", **_aplatir(donnees_llm)},
+            ])
+            buffer_excel = io.BytesIO()
+            with pd.ExcelWriter(buffer_excel, engine="openpyxl") as writer:
+                df_export.to_excel(writer, index=False, sheet_name="Extraction")
+            st.download_button("📊 Télécharger comparaison (Excel)",
+                                data=buffer_excel.getvalue(),
+                                file_name=f"comparaison_{fichier.name}.xlsx",
+                                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                key="dl_excel")
     else:
         st.info("Dépose une facture ou un ticket de caisse pour lancer l'extraction.")
 
