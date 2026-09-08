@@ -11,7 +11,7 @@ import altair as alt
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from ocr.test_ocr import extraire_texte
+from ocr.test_ocr import extraire_texte, extraire_texte_robuste
 from extraction.extraire_donnees import extraire_donnees
 from extraction.extraire_donnees_llm import extraire_donnees_llm
 from anonymisation.anonymiser import anonymiser_donnees
@@ -26,17 +26,18 @@ st.set_page_config(page_title="Extraction OCR + IA", page_icon="⚡", layout="wi
 # ---------------------------------------------------------------
 
 @st.cache_data(show_spinner=False)
-def _ocr_avec_cache(contenu_bytes: bytes, suffixe: str) -> str:
-    """Extrait le texte OCR, mis en cache par empreinte du contenu du fichier."""
+def _ocr_avec_cache(contenu_bytes: bytes, suffixe: str):
+    """Extrait le texte OCR (strategie robuste multi-orientations/langues), mis en cache par empreinte du contenu du fichier."""
     with tempfile.NamedTemporaryFile(delete=False, suffix=suffixe) as tmp:
         tmp.write(contenu_bytes)
         chemin = tmp.name
     try:
-        texte = extraire_texte(chemin)
+        texte, infos = extraire_texte_robuste(chemin)
+        score = infos.get("score", 0)
     finally:
         if os.path.exists(chemin):
             os.remove(chemin)
-    return texte
+    return texte, score
 
 
 @st.cache_data(show_spinner=False)
@@ -312,11 +313,11 @@ with onglet_extraction:
                     except Exception as e:
                         st.warning(f"⚠️ Le prétraitement a échoué ({e}). Poursuite avec l'image originale.")
 
-            with st.spinner("Extraction OCR en cours..."):
+            with st.spinner("Extraction OCR en cours (test de plusieurs orientations/langues)..."):
                 try:
-                    texte_brut = _ocr_avec_cache(chemin_a_traiter_bytes, suffixe)
+                    texte_brut, score_confiance = _ocr_avec_cache(chemin_a_traiter_bytes, suffixe)
                 except Exception as e:
-                    texte_brut = ""
+                    texte_brut, score_confiance = "", 0
                     st.error(f"❌ Échec de l'OCR : {e}")
 
             donnees_regex, erreur_regex = extraction_regex_securisee(texte_brut) if texte_brut else ({}, "Texte OCR vide")

@@ -19,14 +19,11 @@ def ameliorer_image(chemin_image, chemin_sortie="data/ticket_ameliore.png"):
 
     gris = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    debruite = cv2.fastNlMeansDenoising(gris, h=15, templateWindowSize=7, searchWindowSize=21)
+    debruite = cv2.fastNlMeansDenoising(gris, h=6, templateWindowSize=7, searchWindowSize=21)
 
-    binaire = cv2.adaptiveThreshold(
-        debruite, 255,
-        cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-        cv2.THRESH_BINARY,
-        blockSize=15,
-        C=15
+    _, binaire = cv2.threshold(
+        debruite, 0, 255,
+        cv2.THRESH_BINARY + cv2.THRESH_OTSU
     )
 
     redresse = redresser_image(binaire)
